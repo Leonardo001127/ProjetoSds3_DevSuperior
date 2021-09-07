@@ -1,11 +1,19 @@
- 
+import DataTable from "components/DataTable";
+import Footer from "components/Footer";
+import Navbar from "components/Navbar";
+
+
 function App() {
   return (
-    <div className="App">
-      <h1 className="text-primary">Teste</h1>
-    </div>
+    <>
+      <Navbar />
+      <div className="container"> 
+        <h1 className="text-primary">Teste</h1>
+        <DataTable/>
+      </div>
+      <Footer/>
+    </>
   );
 }
 
 export default App;
- 
