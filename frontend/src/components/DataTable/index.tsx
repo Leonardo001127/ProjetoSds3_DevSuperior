@@ -1,4 +1,5 @@
 import axios from "axios";
+import Pagination from "components/Pagination";
 import { useState, useEffect } from "react";
 import { SalePage } from "types/sale";
 import { formatLocalDate } from "utils/formats";
@@ -6,38 +7,45 @@ import { BASE_URL } from "utils/requests";
 
 const DataTable = () => {
 
-    const[page, setPage] = useState<SalePage>({
-        first:true,
-        number:0,
-        totalElements:0,
-        totalPages:0,
-        last:true,
-        page:0
-      });
-      
-      useEffect(()=> {
-        axios.get(`${BASE_URL}/sales?page=1&size=15`)
-    
-        .then( x => {
-            setPage(x.data); 
-          });
-      },[])
+    const [activePage, setActivePage] = useState(0)
+
+    const [page, setPage] = useState<SalePage>({
+        first: true,
+        number: 0,
+        totalElements: 0,
+        totalPages: 0,
+        last: true,
+        page: 1
+    });
+
+    const changePage = (index:number) => {
+        setActivePage(index)
+    }
+    useEffect(() => {
+        axios.get(`${BASE_URL}/sales?page=${activePage}&size=15`)
+
+            .then(x => {
+                setPage(x.data);
+            });
+    }, [activePage])
 
 
     return (
-        <div className="table-responsive">
-            <table className="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Vendedor</th>
-                        <th>Clientes visitados</th>
-                        <th>Negócios fechados</th>
-                        <th>Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {page.content?.map( item => (
+        <>
+            <Pagination page = {page} onPageChange={changePage}/>
+            <div className="table-responsive">
+                <table className="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Vendedor</th>
+                            <th>Clientes visitados</th>
+                            <th>Negócios fechados</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {page.content?.map(item => (
                             <tr key={item.id}>
                                 <td>{formatLocalDate(item.date, "dd/MM/yyyy")}</td>
                                 <td>{item.seller.sellerName}</td>
@@ -46,11 +54,12 @@ const DataTable = () => {
                                 <td>{item.amount}</td>
                             </tr>
                         ))}
-                     
-                    
-                </tbody>
-            </table>
-        </div>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </>
     );
 }
 
