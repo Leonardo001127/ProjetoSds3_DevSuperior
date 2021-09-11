@@ -8,7 +8,7 @@ const Navbar = () => {
                 <nav className="my-2 my-md-0 mr-md-3">
                     <img src={ImgDsDark} alt="DevSuperior" width="120" />
                 </nav>
-            </div>
+            </div>  
         </div>
     );
 }
